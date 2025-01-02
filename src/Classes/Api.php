@@ -2,6 +2,8 @@
 
 namespace Rizk\Kolala\Classes;
 
+use Rizk\Kolala\Models\Photo;
+
 class Api{
     public function __construct()
     {
@@ -15,4 +17,24 @@ class Api{
             exit(); 
         }
     }
+
+    public function all($modle,$filter=[]) {
+        $obj = new $modle;
+        $all_data = $obj->selectMany($filter);
+        if($all_data != null){
+            return json_encode($all_data);
+        }else{
+            return json_encode("no data found");
+        }
+    }
+    public function one($modle,$filter=[]){
+        $obj = new $modle;
+        $all_data = $obj->selectOne($filter);
+        if($all_data != null){
+            return json_encode($all_data);
+        }else{
+            return json_encode("no data found");
+        }
+    }
+
 }

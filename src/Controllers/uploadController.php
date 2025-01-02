@@ -43,7 +43,7 @@ class uploadController
     {
         if (Session::checkSessionExist("user_token")) {
             $user = new User;
-            $user_db = $user->selectOne(["user_token", Session::getSession("user_token")]);
+            $user_db = $user->selectOne(["user_token"=> Session::getSession("user_token")]);
             if ($user_db->role == "admin") {
                 if (Request::checkPostExist("submit")) {
                     if (Request::checkPostExist("csrf_upload") && Request::post("csrf_upload") == Session::getSession('csrf_upload')) {
