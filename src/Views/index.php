@@ -21,6 +21,9 @@ require 'inc/nav.php';
                 <label class="text-2xl dark:text-bg text-primary" for="">Auther</label>
                 <input class="input dark:bg-primary" type="text" name="auther" id="">
 
+                <label class="text-2xl dark:text-bg text-primary" for="">Sub Category</label>
+                <input class="input dark:bg-primary" type="text" name="subcategory" id="" value="Falcon">
+                
                 <label class="text-2xl dark:text-bg text-primary" for="">Description</label>
                 <textarea class="input dark:bg-primary" name="description" id=""></textarea>
 

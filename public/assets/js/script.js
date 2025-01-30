@@ -1,5 +1,5 @@
 $(function () {
-    $(".wrapper").fadeOut(4000, function () {
+    $(".wrapper").fadeOut(1000, function () {
         $("#loader_bg").fadeOut(1000)
     })
 })

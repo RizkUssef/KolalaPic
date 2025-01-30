@@ -55,10 +55,12 @@ class uploadController
                         $auther = Request::clearInput(Request::post("auther"));
                         $description = Request::clearInput(Request::post("description"));
                         $category = Request::clearInput(Request::post("category"));
+                        $subcategory = Request::clearInput(Request::post("subcategory"));
                         $vaild->vaildate("title", $title, [Required::class, Str::class]);
                         $vaild->vaildate("auther", $auther, [Required::class, Str::class]);
                         $vaild->vaildate("description", $description, [Required::class, Str::class]);
                         $vaild->vaildate("category", $category, [Required::class, InArray::class]);
+                        $vaild->vaildate("subcategory", $category, [Str::class]);
                         // file
                         if ($file->checkFile()) {
                             $file_name = $file->getFileData("name");
@@ -77,6 +79,7 @@ class uploadController
                                     "auther" => $auther,
                                     "description" => $description,
                                     "category" => $category,
+                                    "subcategory"=>$subcategory,
                                     "file" => $file_new_name
                                 ]);
                                 if ($insert_result > 0) {
