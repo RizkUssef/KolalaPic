@@ -40,4 +40,8 @@ class Request
     {
         return $_SERVER["REQUEST_URI"];
     }
+    public static function Method()
+    {
+        return $_SERVER["REQUEST_METHOD"];
+    }
 }

@@ -21,4 +21,7 @@ class Redirect
         Session::csrfToken("csrf_create");
         Header::goTo("http://localhost/blog%20to%20try/public/create/createPage");
     }
+    public static function toIndex(){
+        Header::goTo("http://localhost/blog%20to%20try/public/index/indexPage");
+    }
 }
