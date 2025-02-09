@@ -6,18 +6,14 @@ use Rizk\Kolala\Classes\Api;
 use Rizk\Kolala\Classes\Redirect;
 use Rizk\Kolala\Classes\Request;
 use Rizk\Kolala\Classes\Session;
+use Rizk\Kolala\Classes\Validation\Email;
+use Rizk\Kolala\Classes\Validation\Exists;
+use Rizk\Kolala\Classes\Validation\Required;
 use Rizk\Kolala\Classes\Validation\Validation;
 use Rizk\Kolala\Models\User;
 
-class apiLoginController
+class apiLoginController extends apiController
 {
-    protected $api;
-    public function __construct()
-    {
-        session_start();
-        $this->api = new Api;
-    }
-
     public function loginCsrf()
     {
         $api = new Api;
@@ -37,13 +33,26 @@ class apiLoginController
             $user = new User;
             $db_data = $user->selectOne(["email" => $email]);
             $password = $data["password"];
-            if (password_verify($password, $db_data['password'])) {
-                http_response_code(200);
-                Session::csrfToken('user_token');
-                echo json_encode(['user_token' =>Session::getSession('user_token')]);
-            } else {
-                http_response_code(404); 
-                echo json_encode("wrong creditional");
+            if($data["csrf_login"] == $csrf_login){
+                $vaild->vaildate("email", $data["email"], [Required::class, Email::class,Exists::class]);
+                $vaild->vaildate("password", $password, [Required::class]);
+                $errors = $vaild->getErrors();
+                if(empty($errors)){
+                    if (password_verify($password, $db_data['password'])) {
+                        http_response_code(200);
+                        Session::csrfToken('user_token');
+                        echo json_encode(['user_token' =>Session::getSession('user_token')]);
+                    } else {
+                        http_response_code(404); 
+                        echo json_encode("wrong creditional");
+                    }
+                }else{
+                    http_response_code(404);
+                    echo json_encode($errors);
+                }
+            }else{
+                http_response_code(404);
+                echo json_encode("unauthurized access");
             }
         } else {
             http_response_code(404);

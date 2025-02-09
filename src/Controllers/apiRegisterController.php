@@ -11,14 +11,8 @@ use Rizk\Kolala\Classes\Validation\Str;
 use Rizk\Kolala\Classes\Validation\Validation;
 use Rizk\Kolala\Models\User;
 
-class apiRegisterController{
-    protected $api;
+class apiRegisterController extends apiController{
     
-    public function __construct()
-    {
-        session_start();
-        $this->api = new Api;
-    }
     public function registerCsrf()
     {
         $api = new Api;
