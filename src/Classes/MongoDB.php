@@ -26,12 +26,12 @@ abstract class MongoDB implements DB{
         }
     }
 
-
     public function insert($document){
         $insertResult = $this->collection->insertOne($document);
         $count = $insertResult->getInsertedCount();
         return $count;
     }
+
     public function insertMany($document){
         $insertResult = $this->collection->insertOne($document);
         $count = $insertResult->getInsertedCount();
