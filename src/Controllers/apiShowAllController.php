@@ -12,9 +12,9 @@ class apiShowAllController extends apiController{
         $api = new Api;
         if (Request::checkGetExist("category")) {
             $cate = Request::get("category");
-            echo json_encode($api->all(Photo::class, ["category" => $cate]));
+            echo ($api->all(Photo::class, ["category" => $cate]));
         } else {
-            echo json_encode($api->all(Photo::class));
+            echo ($api->all(Photo::class));
         }
     }
 }

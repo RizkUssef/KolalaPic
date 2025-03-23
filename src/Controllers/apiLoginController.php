@@ -18,7 +18,7 @@ class apiLoginController extends apiController
     {
         $api = new Api;
         Session::csrfToken('csrf_login');
-        echo json_encode(['csrf_login' => Session::getSession('csrf_login')]);
+        echo json_encode(['csrf' => Session::getSession('csrf_login')]);
     }
 
     public function loginHandle()
@@ -33,30 +33,34 @@ class apiLoginController extends apiController
             $user = new User;
             $db_data = $user->selectOne(["email" => $email]);
             $password = $data["password"];
-            if($data["csrf_login"] == $csrf_login){
-                $vaild->vaildate("email", $data["email"], [Required::class, Email::class,Exists::class]);
+            if ($data["csrf_login"] == $csrf_login) {
+                $vaild->vaildate("email", $data["email"], [Required::class, Email::class, Exists::class]);
                 $vaild->vaildate("password", $password, [Required::class]);
                 $errors = $vaild->getErrors();
-                if(empty($errors)){
+                if (empty($errors)) {
                     if (password_verify($password, $db_data['password'])) {
                         http_response_code(200);
                         Session::csrfToken('user_token');
-                        echo json_encode(['user_token' =>Session::getSession('user_token')]);
+                        $filter = ["email" => $email]; // Find document where email = "user@example.com"
+                        $update = ['$set' => ["user_token" => Session::getSession('user_token')]];
+                        $user->update($filter,$update);
+                        echo json_encode(['user_token' => Session::getSession('user_token')]);
                     } else {
-                        http_response_code(404); 
-                        echo json_encode("wrong creditional");
+                        http_response_code(404);
+                        echo json_encode(["error" => "wrong creditionals"]);
+                        // exit();
                     }
-                }else{
+                } else {
                     http_response_code(404);
-                    echo json_encode($errors);
+                    echo json_encode(["error" => $errors]);
                 }
-            }else{
+            } else {
                 http_response_code(404);
-                echo json_encode("unauthurized access");
+                echo json_encode(["error" => "unauthurized access"]);
             }
         } else {
             http_response_code(404);
-            echo json_encode("access denied");
+            echo json_encode(["error" => "access denied"]);
         }
     }
 }

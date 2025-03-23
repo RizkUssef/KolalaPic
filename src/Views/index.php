@@ -29,8 +29,8 @@ require 'inc/nav.php';
 
                 <label class="text-2xl dark:text-bg text-primary" for="">Category</label>
                 <select class="input dark:bg-primary selection:bg-secondary" name="category" id="">
-                    <option selected value="animals">animals</option>
-                    <option value="calm">calm</option>
+                    <option  value="animals">animals</option>
+                    <option selected value="calm">calm</option>
                     <option value="couples">couples</option>
                     <option value="dark">dark</option>
                     <option value="football">football</option>

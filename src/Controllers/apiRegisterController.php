@@ -17,7 +17,7 @@ class apiRegisterController extends apiController{
     {
         $api = new Api;
         Session::csrfToken('csrf_register');
-        echo json_encode(['csrf_register' => Session::getSession('csrf_register')]);
+        echo json_encode(['csrf' => Session::getSession('csrf_register')]);
     }
 
     public function registerHandle()
@@ -42,11 +42,12 @@ class apiRegisterController extends apiController{
                     "email" => $data["email"],
                     "password" => $password,
                     "role" => "user",
+                    // "token"=> bin2hex(random_bytes(32)),
                 ];
                 if (empty($errors)) {
                     if (password_verify($password_confirmation, $password)) {
                         http_response_code(200);
-                        echo json_encode($api->insertUser(User::class, $doc));
+                        echo ($api->insertUser(User::class, $doc));
                     } else {
                         http_response_code(404);
                         echo json_encode("password must be confirmed");

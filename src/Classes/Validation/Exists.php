@@ -12,7 +12,7 @@ class Exists implements Vaildator{
         $filter = ["email"=>$value];
         $user=$userObject->selectOne($filter);
         if($user == null){
-            return "wrong creditionals  mail";
+            return "wrong creditionals";
         }else{
             return false;
         }
