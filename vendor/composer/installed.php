@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'rizk/kolala',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '620c8a1fbc32680e1143c17295ce4b1c2aee9cf7',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -38,9 +38,9 @@
             'dev_requirement' => false,
         ),
         'rizk/kolala' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '620c8a1fbc32680e1143c17295ce4b1c2aee9cf7',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

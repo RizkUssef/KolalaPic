@@ -18,7 +18,7 @@ class apiLogoutController extends apiController{
                 $update = ['$set' =>["user_token"=>null]];
                 $user->update($filter,$update);
                 Session::removeSession("user_token");
-                http_response_code(200);
+                http_response_code( 200);
                 echo json_encode(["success"=>"you're logged out successfully"]);
             }else{
                 http_response_code(404);
@@ -28,7 +28,5 @@ class apiLogoutController extends apiController{
             http_response_code(404);
             echo json_encode(["error"=>"unkown user"]);
         }
-
-
     }
 }

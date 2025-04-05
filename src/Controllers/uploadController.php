@@ -50,6 +50,7 @@ class uploadController
                         $vaild = new Validation;
                         $photo = new Photo;
                         $file = new Files("image");
+                        $user = new User;
 
                         $title = Request::clearInput(Request::post("title"));
                         $auther = Request::clearInput(Request::post("auther"));
@@ -61,6 +62,11 @@ class uploadController
                         $vaild->vaildate("description", $description, [Required::class, Str::class]);
                         $vaild->vaildate("category", $category, [Required::class, InArray::class]);
                         $vaild->vaildate("subcategory", $category, [Str::class]);
+                        // get user id
+                        $filter = ["user_token" => Session::getSession("user_token"),"role" => "admin"];
+                        $user_db = $user->selectOne($filter);
+                        // echo "<pre>";
+                        // var_dump($user_db->_id);
                         // file
                         if ($file->checkFile()) {
                             $file_name = $file->getFileData("name");
@@ -72,6 +78,8 @@ class uploadController
                             $vaild->vaildate("file", $file_size_mb, [FileSize::class]);
                             $vaild->vaildate("file", $file_ext, [FileExtension::class]);
                             $errors = $vaild->getErrors();
+                            // use MongoDB\BSON\ObjectId;
+                            // $filter = ["_id" => new ObjectId($id)];
                             if (empty($errors)) {
                                 $file->storeFile($file_tmp_name, $file_new_name);
                                 $insert_result = $photo->insert([
@@ -80,7 +88,8 @@ class uploadController
                                     "description" => $description,
                                     "category" => $category,
                                     "subcategory"=>$subcategory,
-                                    "file" => $file_new_name
+                                    "file" => $file_new_name,
+                                    "user_id" => $user_db->_id
                                 ]);
                                 if ($insert_result > 0) {
                                     Session::setSession("success", "Data Inserted Successfully");

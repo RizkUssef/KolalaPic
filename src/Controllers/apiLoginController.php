@@ -44,6 +44,8 @@ class apiLoginController extends apiController
                         $filter = ["email" => $email]; // Find document where email = "user@example.com"
                         $update = ['$set' => ["user_token" => Session::getSession('user_token')]];
                         $user->update($filter,$update);
+                        // Session::removeSession('csrf_login');
+                        // echo json_encode(['success'=> true,'sessions'=> $_SESSION]);
                         echo json_encode(['user_token' => Session::getSession('user_token')]);
                     } else {
                         http_response_code(404);

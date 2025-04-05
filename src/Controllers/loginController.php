@@ -24,6 +24,7 @@ class loginController{
     public function createAdmin(){
         $user = new User;
         $count = $user->insert([
+            "name"=>"RUK",
             "email" => "ruk.ussef@gmail.com",
             "password"=> password_hash("123456",PASSWORD_DEFAULT),
             "role"=>"admin"
@@ -35,6 +36,7 @@ class loginController{
     }
 
     public function loginHandle() {
+        
         if(Request::checkPostExist('submit')){
             echo Request::post("csrf_login") == Session::getSession('csrf_login');
             if(Request::checkPostExist("csrf_login") && Request::post("csrf_login") == Session::getSession('csrf_login')){
