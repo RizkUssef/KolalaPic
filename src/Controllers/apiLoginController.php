@@ -41,16 +41,13 @@ class apiLoginController extends apiController
                     if (password_verify($password, $db_data['password'])) {
                         http_response_code(200);
                         Session::csrfToken('user_token');
-                        $filter = ["email" => $email]; // Find document where email = "user@example.com"
+                        $filter = ["email" => $email]; 
                         $update = ['$set' => ["user_token" => Session::getSession('user_token')]];
                         $user->update($filter,$update);
-                        // Session::removeSession('csrf_login');
-                        // echo json_encode(['success'=> true,'sessions'=> $_SESSION]);
                         echo json_encode(['user_token' => Session::getSession('user_token')]);
                     } else {
                         http_response_code(404);
                         echo json_encode(["error" => "wrong creditionals"]);
-                        // exit();
                     }
                 } else {
                     http_response_code(404);
