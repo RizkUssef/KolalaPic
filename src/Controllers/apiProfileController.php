@@ -45,7 +45,8 @@ class apiProfileController
         }
     }
 
-    public function getInteractionsFiles(){
+    public function getInteractionsFiles()
+    {
         $api = new Api();
         $headers = getallheaders();
         if (isset($headers["tkn"])) {
@@ -57,15 +58,17 @@ class apiProfileController
                 $userData = $user->selectOne($filter);
                 $images = [];
                 // foreach ($userData->loved as $Photos) {
-                    $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
-                    $filterSaved = ["_id" => new ObjectID($userData->saved[0])];
-                    // $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
-                    $images[] = $photo->selectOne($filterLoved);
-                    $images[] = $photo->selectOne($filterSaved);
+                $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
+                $filterSaved = ["_id" => new ObjectID($userData->saved[0])];
+                $filterUploadPhoto = ["user_id" => $userData->_id];
+                // $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
+                $images[] = $photo->selectOne($filterLoved);
+                $images[] = $photo->selectOne($filterSaved);
+                $images[] = $photo->selectOne($filterUploadPhoto);
                 // }
                 http_response_code(200);
                 echo json_encode($images);
-            }else {
+            } else {
                 http_response_code(404);
                 echo json_encode(["error" => "unAuth User"]);
             }
@@ -81,5 +84,31 @@ class apiProfileController
     public function showAllSaved()
     {
         apiProfileController::showPhotoProfile("saved");
+    }
+    public function showAllUploaded()
+    {
+        $api = new Api();
+        $headers = getallheaders();
+        if (isset($headers["tkn"])) {
+            $tkn = $headers["tkn"];
+            if ($tkn == Session::getSession("user_token")) {
+                $user = new User();
+                $photo = new Photo();
+                $userFilter = ["user_token" => $tkn];
+                $userData = $user->selectOne($userFilter);
+                $photoFilter = ["user_id"=>$userData->_id];
+                $photos = $photo->selectMany($photoFilter);
+
+                http_response_code(200);
+                echo json_encode( $photos);
+
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "unAuth User"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "unKnown User"]);
+        }
     }
 }

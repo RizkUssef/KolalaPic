@@ -23,7 +23,7 @@ class Files
     }
     public function sizeMB($size)
     {
-        return $size * (1024 * 1024);
+        return $size / (1024 * 1024);
     }
 
     public function getExt($imageName)

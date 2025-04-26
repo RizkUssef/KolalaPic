@@ -6,7 +6,7 @@ namespace Rizk\Kolala\Classes\Validation;
 
 class FileSize implements Vaildator {
     public function check($key,$value){
-        if($value > 5){
+        if($value > 10){
             return "$key must be less than 5 MB";
         }else{
             return false;
