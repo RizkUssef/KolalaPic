@@ -18,13 +18,15 @@ class apiProfileController
     }
     public static function showPhotoProfile($interaction)
     {
-        if (Request::checkGetExist("user_token")) {
-            $api = new Api();
-            $user_token = Request::get("user_token");
-            if (Session::getSession("user_token") == $user_token) {
+        // Api::handleCros();
+        $api = new Api();
+        $headers = getallheaders();
+        if (isset($headers["tkn"])) {
+            $tkn = $headers["tkn"];
+            if (Session::getSession("user_token") == $tkn) {
                 $user = new User();
                 $photo = new Photo();
-                $filter = ["user_token" => $user_token];
+                $filter = ["user_token" => $tkn];
                 $userData = $user->selectOne($filter);
                 $images = [];
                 foreach ($userData->$interaction as $Photos) {
@@ -42,11 +44,42 @@ class apiProfileController
             echo json_encode(["error" => "unKnown User"]);
         }
     }
+
+    public function getInteractionsFiles(){
+        $api = new Api();
+        $headers = getallheaders();
+        if (isset($headers["tkn"])) {
+            $tkn = $headers["tkn"];
+            if (Session::getSession("user_token") == $tkn) {
+                $user = new User();
+                $photo = new Photo();
+                $filter = ["user_token" => $tkn];
+                $userData = $user->selectOne($filter);
+                $images = [];
+                // foreach ($userData->loved as $Photos) {
+                    $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
+                    $filterSaved = ["_id" => new ObjectID($userData->saved[0])];
+                    // $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
+                    $images[] = $photo->selectOne($filterLoved);
+                    $images[] = $photo->selectOne($filterSaved);
+                // }
+                http_response_code(200);
+                echo json_encode($images);
+            }else {
+                http_response_code(404);
+                echo json_encode(["error" => "unAuth User"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "unKnown User"]);
+        }
+    }
     public function showAllLoved()
     {
         apiProfileController::showPhotoProfile("loved");
     }
-    public function showAllSaved(){
+    public function showAllSaved()
+    {
         apiProfileController::showPhotoProfile("saved");
     }
 }
