@@ -29,4 +29,30 @@ class apiLogoutController extends apiController{
             echo json_encode(["error"=>"unkown user"]);
         }
     }
+
+    public function checkAuth(){
+        $api = new Api;
+        $user = new User;
+        $headers = getallheaders();
+        if(isset($headers["tkn"])){
+            $tkn = $headers["tkn"];
+            if(Session::checkSessionExist("user_token")){
+                if(Session::getSession("user_token")==$tkn){
+                    http_response_code(200);
+                    echo json_encode(["Auth"=>true]);
+                }else{
+                    http_response_code(404);
+                    echo json_encode(["error"=>"unAuth User"]);
+                }
+            }else{
+                $userFilter = ["user_token"=>$tkn];
+                $user->update($userFilter,['$set'=>["user_token"=>null]]);
+                http_response_code(200);
+                echo json_encode(["Auth"=>false]); 
+            }
+        }else{
+            http_response_code(404);
+            echo json_encode(["error"=>"you must login first"]); 
+        }
+    }
 }

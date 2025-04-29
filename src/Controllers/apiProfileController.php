@@ -29,12 +29,17 @@ class apiProfileController
                 $filter = ["user_token" => $tkn];
                 $userData = $user->selectOne($filter);
                 $images = [];
-                foreach ($userData->$interaction as $Photos) {
-                    $filterPhotos = ["_id" => new ObjectID($Photos)];
-                    $images[] = $photo->selectOne($filterPhotos);
+                if(isset($userData->$interaction)){
+                    foreach ($userData->$interaction as $Photos) {
+                        $filterPhotos = ["_id" => new ObjectID($Photos)];
+                        $images[] = $photo->selectOne($filterPhotos);
+                    }
+                    http_response_code(200);
+                    echo json_encode($images);
+                }else{
+                    http_response_code(404);
+                    echo json_encode(["error" => "you don't $interaction yet"]);                    
                 }
-                http_response_code(200);
-                echo json_encode($images);
             } else {
                 http_response_code(404);
                 echo json_encode(["error" => "unAuth User"]);
@@ -57,15 +62,12 @@ class apiProfileController
                 $filter = ["user_token" => $tkn];
                 $userData = $user->selectOne($filter);
                 $images = [];
-                // foreach ($userData->loved as $Photos) {
                 $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
                 $filterSaved = ["_id" => new ObjectID($userData->saved[0])];
                 $filterUploadPhoto = ["user_id" => $userData->_id];
-                // $filterLoved = ["_id" => new ObjectID($userData->loved[0])];
                 $images[] = $photo->selectOne($filterLoved);
                 $images[] = $photo->selectOne($filterSaved);
                 $images[] = $photo->selectOne($filterUploadPhoto);
-                // }
                 http_response_code(200);
                 echo json_encode($images);
             } else {

@@ -27,7 +27,6 @@ class apiUploadImageController
         Session::csrfToken('csrf_upload');
         echo json_encode(['csrf' => Session::getSession('csrf_upload')]);
     }
-
     public function upload()
     {
         $api = new Api;
@@ -35,9 +34,9 @@ class apiUploadImageController
         if (strtoupper(Request::Method()) === "POST") {
             $user = new User();
             $photo = new Photo();
-            if(isset($headers['tkn'])){
+            if (isset($headers['tkn'])) {
                 $tkn = $headers['tkn'];
-                if($tkn == Session::getSession('user_token')){
+                if ($tkn == Session::getSession('user_token')) {
                     $upload_csrf = Request::post("upload_csrf");
                     if ($upload_csrf == Session::getSession("csrf_upload")) {
                         $vaild = new Validation;
@@ -68,49 +67,70 @@ class apiUploadImageController
                             // get error
                             $errors = $vaild->getErrors();
                             if (empty($errors)) {
-                                $file->storeFile($imgTmpName,$imgName);
-                                $userFilter = ["user_token"=>$tkn];
+                                $file->storeFile($imgTmpName, $imgName);
+                                $userFilter = ["user_token" => $tkn];
                                 $userDB = $user->selectOne($userFilter);
                                 $doc = [
-                                    "title"=>$fileName,
-                                    "auther"=>$auther,
-                                    "description"=>$description,
-                                    "category"=>$category,
-                                    "subcategory"=>$sub_category,
-                                    "file"=>$imgName,
-                                    "user_id"=>$userDB->_id,
+                                    "title" => $fileName,
+                                    "auther" => $auther,
+                                    "description" => $description,
+                                    "category" => $category,
+                                    "subcategory" => $sub_category,
+                                    "file" => $imgName,
+                                    "user_id" => $userDB->_id,
                                 ];
                                 $insertRes = $photo->insert($doc);
                                 if ($insertRes) {
                                     http_response_code(200);
                                     echo json_encode(["success" => "Image Inserted successfully"]);
-                                }else{
+                                } else {
                                     http_response_code(404);
                                     echo json_encode(["error" => "error while uploading"]);
                                 }
-                            }else{
+                            } else {
                                 http_response_code(404);
                                 echo json_encode(["error" => $errors]);
                             }
                         } else {
                             http_response_code(404);
-                            echo json_encode(["error"=>"Waiting for your upload ..."]);
+                            echo json_encode(["error" => "Waiting for your upload ..."]);
                         }
                     } else {
                         http_response_code(404);
-                        echo json_encode(["error"=>"unauthurized way to access"]);
+                        echo json_encode(["error" => "unauthurized way to access"]);
                     }
-                }else{
+                } else {
                     http_response_code(404);
-                    echo json_encode(["error"=>"UnAuth User"]);
+                    echo json_encode(["error" => "UnAuth User"]);
                 }
-            }else{
+            } else {
                 http_response_code(404);
-                echo json_encode(["error"=>"You must Login first"]);
+                echo json_encode(["error" => "You must Login first"]);
             }
         } else {
             http_response_code(404);
-            echo json_encode(["error"=>"access denied"]);
+            echo json_encode(["error" => "access denied"]);
+        }
+    }
+    public function getUserData()
+    {
+        $api = new Api;
+        $headers = getallheaders();
+        if (isset($headers["tkn"])) {
+            $tkn = $headers["tkn"];
+            $user = new User;
+            if(Session::getSession("user_token") == $tkn){
+                $user_filter = ["user_token" => $tkn];
+                $userData = $user->selectOne($user_filter);
+                http_response_code(200);
+                echo json_encode($userData);
+            }else{
+                http_response_code(404);
+                echo json_encode(["error" => "UnAuth User"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Unknown User"]);
         }
     }
 }
