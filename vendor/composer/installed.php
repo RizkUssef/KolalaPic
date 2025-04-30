@@ -3,7 +3,7 @@
         'name' => 'rizk/kolala',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '620c8a1fbc32680e1143c17295ce4b1c2aee9cf7',
+        'reference' => '0f2d9000df6f008a252dbac4684f72fa1e5f7765',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -28,6 +28,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.10.0',
+            'version' => '6.10.0.0',
+            'reference' => 'bf74d75a1fde6beaa34a0ddae2ec5fce0f72a144',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'psr/log' => array(
             'pretty_version' => '3.0.2',
             'version' => '3.0.2.0',
@@ -40,7 +49,7 @@
         'rizk/kolala' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '620c8a1fbc32680e1143c17295ce4b1c2aee9cf7',
+            'reference' => '0f2d9000df6f008a252dbac4684f72fa1e5f7765',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
